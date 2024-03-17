@@ -1,0 +1,25 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<script src="https://unpkg.com/htmx.org@1.9.11"></script>
+<body>
+
+<div>
+    <form hx-post="/create" hx-target="#table-body" hx-swap="afterend" >
+        <p> Enter Task details : </p>
+        <label>Title : <input name="title" value=""> </label><br>
+        <label>Desc : <input name="desc" value=""> </label> <br>
+        <label>Story points : <input name="point" type="number" value=""> </label> <br>
+        <label>Order : <input name="order" type="number" value=""> </label> <br>
+        <label>Assignee :  <input name="assignee" value=""></label><br>
+        <button type="submit" >Create Task</button><br>
+    </form>
+</div>
+
+<table>
+    <tbody id="table-body">
+    <!-- Existing rows, if any -->
+
+    </tbody>
+</table>
+
+</body>
+</html>
