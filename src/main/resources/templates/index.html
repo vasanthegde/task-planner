@@ -1,25 +1,80 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <script src="https://unpkg.com/htmx.org@1.9.11"></script>
-<body>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
 
+<body>
+<style type="text/css">
+    table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+</style>
 <div>
-    <form hx-post="/create" hx-target="#table-body" hx-swap="afterend" >
-        <p> Enter Task details : </p>
-        <label>Title : <input name="title" value=""> </label><br>
-        <label>Desc : <input name="desc" value=""> </label> <br>
-        <label>Story points : <input name="point" type="number" value=""> </label> <br>
-        <label>Order : <input name="order" type="number" value=""> </label> <br>
-        <label>Assignee :  <input name="assignee" value=""></label><br>
-        <button type="submit" >Create Task</button><br>
+    <form hx-post="/create" hx-target="#table-body" hx-swap="afterend">
+        <p>Enter Task details:</p>
+        <label>Title: <input name="title" value="1"></label><br>
+        <label>Desc: <input name="desc" value="1"></label><br>
+        <label>Story points: <input name="point" type="number" value="1"></label><br>
+        <label>Order: <input name="order" type="number" value="1"></label><br>
+        <label>Assignee: <input name="assignee" value="1"></label><br>
+        <button type="submit">Create Task</button><br>
     </form>
 </div>
 
 <table>
-    <tbody id="table-body">
-    <!-- Existing rows, if any -->
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Story Points</th>
+        <th>Order</th>
+        <th>Assignee</th>
+    </tr>
+    </thead>
 
-    </tbody>
+    <form id="table-body" class="sortable" hx-post="/items" hx-trigger="end">
+<!--        <tbody id="table-body">-->
+<!--        </tbody>-->
+    </form>
+
 </table>
 
+<form hx-post="/items" hx-trigger="end">
+<div class="htmx-indicator">Updating...</div>
+<table>
+    <tbody id="sortable-container">
+    <tr ><td><input type="hidden" name="item" value="2" />Item 2</td></tr>
+    <tr ><td><input type="hidden" name="item" value="3" />Item 3</td></tr>
+    <tr ><td><input type="hidden" name="item" value="4" />Item 4</td></tr>
+    <tr><td><input type="hidden" name="item" value="5" />Item 5</td></tr>
+    </tbody>
+</table>
+</form>
+
 </body>
+
+<script>
+    const el = document.getElementById('sortable-container');
+    const sortable = Sortable.create(el, {
+        animation: 150,
+        draggable: 'tr', // Specify the draggable elements
+        handle: 'tr', // Specify the drag handle elements
+        onEnd: function(evt) {
+            updateRowIndices();
+        }
+    });
+
+    function updateRowIndices() {
+        const rows = document.querySelectorAll('#sortable-container tr');
+        rows.forEach((row, index) => {
+            row.dataset.index = index;
+        });
+    }
+</script>
 </html>
